@@ -36,7 +36,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $users = User::select('id', 'name')->get();
+        return view('posts.create', compact('users'));
     }
 
     /**
@@ -52,10 +53,11 @@ class PostController extends Controller
             'description' => 'required',
         ]);
 
+        $userId = $request->user ?: auth()->user()->id;
         Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'user_id' => auth()->user()->id
+            'user_id' => $userId
         ]);
 
         flash()->stored();
