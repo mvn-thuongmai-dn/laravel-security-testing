@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -15,6 +16,10 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
+        if (Gate::allows('create-post')) {
+            $posts = [];
+        }
+
         return view('posts.index', compact('posts'));
     }
 
@@ -25,6 +30,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        if (Gate::none(['create-post', 'view-create-post'])) {
+            abort(403);
+        }
         return view('posts.create');
     }
 
@@ -36,6 +44,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (Gate::none(['create-post', 'view-create-post'])) {
+            abort(403);
+        }
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -59,6 +71,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        if (Gate::any(['create-post', 'view-all-post', 'view-create-post'])) {
+            abort(403);
+        }
         return view('posts.show')
             ->with('post', Post::where('id', $post->id)->first());
     }
@@ -71,7 +86,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // dd(Post::where('id', $post->id)->first());
+        if (Gate::any(['create-post', 'view-all-post', 'view-create-post'])) {
+            abort(403);
+        }
         return view('posts.edit')
             ->with('post', Post::where('id', $post->id)->first());
     }
@@ -85,6 +102,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if (Gate::any(['create-post', 'view-all-post', 'view-create-post'])) {
+            abort(403);
+        }
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -109,6 +130,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if (Gate::any(['create-post', 'view-all-post', 'view-create-post'])) {
+            abort(403);
+        }
+
         $post = Post::where('id', $post->id);
         $post->delete();
         flash()->deleted();
