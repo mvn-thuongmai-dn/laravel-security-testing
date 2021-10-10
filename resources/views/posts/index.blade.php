@@ -39,9 +39,9 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($posts as $post)
-
-                        <tr>
-                            {{-- <td class="px-6 py-4 whitespace-nowrap">
+                        @can('filterRoleViewAny', $post)
+                            <tr>
+                                {{-- <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
                                         <img class="h-10 w-10 rounded-full"
@@ -58,11 +58,11 @@
                                     </div>
                                 </div>
                             </td> --}}
-                            <td class="whitespace-nowrap">
-                                <a href="{{ route('posts.show', $post) }}"
-                                    class="px-6 py-4 text-sm text-gray-900">{{ $post->title }}</a>
-                            </td>
-                            {{-- <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="whitespace-nowrap">
+                                    <a href="{{ route('posts.show', $post) }}"
+                                        class="px-6 py-4 text-sm text-gray-900">{{ $post->title }}</a>
+                                </td>
+                                {{-- <td class="px-6 py-4 whitespace-nowrap">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Active
@@ -71,17 +71,17 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 Admin
                             </td> --}}
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-around">
-                                <a href="{{ route('posts.edit', $post) }}"
-                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                <form action="{{ route('posts.destroy', $post) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-indigo-600 hover:text-indigo-900">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-around">
+                                    <a href="{{ route('posts.edit', $post) }}"
+                                        class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="text-indigo-600 hover:text-indigo-900">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endcan
                     @endforeach
                     <!-- More people... -->
                 </tbody>
